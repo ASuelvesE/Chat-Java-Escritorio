@@ -1,6 +1,7 @@
 package principal;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -13,25 +14,19 @@ public class Uso {
 	private static io.socket.client.Socket mSocket;
 
 	private static String conectado = "usuario nuevo";
+	private static String actualizaUsuarios = "actualiza usuarios";
 	private static String eventoChat = "evento chat";
-	private static String mensaje;
-	private String evento = "chat mensaje";
-	private String desconectado = "usuario desconectado";
-	private String usuariosConectados = "usuarios conectados";
-	
+
 	private static Chat michat;
 	private static Cliente cliente;
-	static String chat = "";
+	private static String chat = "";
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
 		michat = new Chat();
 		cliente = new Cliente(JOptionPane.showInputDialog("Escribe tu nick"));
 
-
-		
-		
 		try {
-			mSocket = IO.socket("https://servidorclaseperro.herokuapp.com/");
+			mSocket = IO.socket("https://chatescritoriojava.herokuapp.com/");
 //			mSocket = IO.socket("http://127.0.0.1:3000/");
 			mSocket.connect(); // Conectamos y permanecemos a la escucha
 			mSocket.emit(conectado, cliente.getNombre());
@@ -43,27 +38,24 @@ public class Uso {
 
 		///////////////////////////////////////////////////// RECIBIMOS DEL SERVIDOR
 		///////////////////////////////////////////////////// ////////////////////////////////////////////////////
-
-		mSocket.on(conectado, new Emitter.Listener() { // Esperamos el nombre del nuevo usuario conectado
+		
+		mSocket.on(actualizaUsuarios, new Emitter.Listener() { // Esperamos el nombre del nuevo usuario conectado
 			public void call(Object... args) {
-				String nombres = "";
+				michat.getUsuarios().setText("\n");
 				for (int i = 0; i < args.length; i++) {
-					nombres += "\n-" + (String) args[i] + "\n";
-					michat.getUsuarios().setText(nombres);
+					michat.getUsuarios().setText("\t" + (String)args[i]);
 				}
-				System.out.println(nombres);
 			}
 		});
-
+		
 		mSocket.on(eventoChat, new Emitter.Listener() { // Esperamos el mensaje de chat desde el servidor
 			public void call(Object... args) {
 				chat += args[1] + " : " + (String) args[0] + "\n";
-				michat.getArea().setText(chat);
-
+				michat.getArea().setText("   -" +chat);
 			}
 		});
-
 	}
+	
 /////////////////////////////////////////////// PETICIONES AL SERVIDOR
 /////////////////////////////////////////////// ////////////////////////////////////////////
 
