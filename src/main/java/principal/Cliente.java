@@ -7,7 +7,6 @@ public class Cliente {
 
 	public Cliente(String nombre) {
 		this.nombre = nombre;
-		
 	}
 
 	public String getNombre() {

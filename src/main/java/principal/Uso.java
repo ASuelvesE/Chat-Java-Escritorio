@@ -50,8 +50,8 @@ public class Uso {
 		
 		mSocket.on(eventoChat, new Emitter.Listener() { // Esperamos el mensaje de chat desde el servidor
 			public void call(Object... args) {
-				chat += args[1] + " : " + (String) args[0] + "\n";
-				michat.getArea().setText("   -" +chat);
+				chat += "   -"+args[1] + " : " + (String) args[0] + "\n";
+				michat.getArea().setText(chat);
 			}
 		});
 	}
