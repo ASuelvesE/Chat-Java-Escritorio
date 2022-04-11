@@ -18,7 +18,12 @@ public class Uso {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				cliente = new Cliente(JOptionPane.showInputDialog("Escribe tu nick"));
+				String nombre = JOptionPane.showInputDialog("Escribe tu nick");
+				if (nombre == null || nombre.equals(""))
+					cliente = new Cliente("Anonimo");
+				else
+					cliente = new Cliente(nombre);
+
 				iniciaChat("General");
 			}
 		});
