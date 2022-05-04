@@ -25,6 +25,7 @@ public class Uso {
 					cliente = new Cliente(nombre);
 
 				iniciaChat("General");
+
 			}
 		});
 	}

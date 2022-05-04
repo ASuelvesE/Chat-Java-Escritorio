@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 
@@ -27,20 +28,20 @@ import principal.Cliente;
 import principal.Uso;
 import sockets.Socket;
 
-public class Chat {
+public class Chat extends JFrame{
 
 	private Cliente cliente;
 	private String chat = "";
 	private String sala;
-	private static JFrame miMarco;
-
+	
+	JFrame miMarco;
 	JPanel principal, nav, mainPanel, asidePanel, footerPanel, asideIz;
 	JLabel titulo, titulo_usuarios, titulo_salas;
 	JTextArea usuarios, salas;
 	JTextArea area;
-	private JTextArea areaEscribir;
-	private JButton boton, boton2, boton3;
-	private Color micolor, micolor2, micolor3, micolor4, micolor5;
+	JTextArea areaEscribir;
+	JButton boton, boton2, boton3;
+	Color micolor, micolor2, micolor3, micolor4, micolor5;
 
 	public Chat(String sala) {
 		this.sala = sala;
@@ -53,15 +54,14 @@ public class Chat {
 		Toolkit mipantalla = Toolkit.getDefaultToolkit();
 		Dimension tamanoPantalla = mipantalla.getScreenSize();
 
-		miMarco = new JFrame();
-		miMarco.setBounds(tamanoPantalla.width / 7, tamanoPantalla.height / 6, tamanoPantalla.width / 2,
-				tamanoPantalla.height / 2);
-		miMarco.setLayout(new BorderLayout(30, 30));
-		miMarco.setMinimumSize(new Dimension(900, 600));
-		miMarco.setTitle(sala);
-
+		this.setBounds(tamanoPantalla.width / 7, tamanoPantalla.height / 6, tamanoPantalla.width / 2,tamanoPantalla.height / 2);
+		this.setLayout(new BorderLayout(30, 30));
+		this.setMinimumSize(new Dimension(900, 600));
+		this.setTitle(sala);
+		
 		principal = new JPanel(new BorderLayout(10, 10));
 		principal.setBackground(micolor);
+		principal.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
 		titulo_salas = new JLabel("-SALAS-", JLabel.CENTER);
 		titulo_salas.setFont(mifuente);
@@ -94,7 +94,7 @@ public class Chat {
 		area = new JTextArea();
 		area.setForeground(Color.white);
 		area.setBackground(micolor3);
-		area.setPreferredSize(new Dimension(miMarco.getWidth() / 1, miMarco.getHeight() ));
+		area.setPreferredSize(new Dimension(this.getWidth() / 1, this.getHeight() ));
 		area.setFont(mifuente);
 		area.setText("\n");
 		area.setBorder(new MatteBorder(2, 2, 2, 2, Color.white));
@@ -103,7 +103,7 @@ public class Chat {
 		areaEscribir = new JTextArea();
 		areaEscribir.setBackground(micolor3);
 		areaEscribir.setForeground(Color.white);
-		areaEscribir.setPreferredSize(new Dimension((miMarco.getWidth() / 2 + 60), miMarco.getHeight() / 10));
+		areaEscribir.setPreferredSize(new Dimension((this.getWidth() / 2), this.getHeight() / 10));
 		areaEscribir.setFont(mifuente);
 		areaEscribir.setBorder(new MatteBorder(2, 2, 2, 2, Color.white));
 		areaEscribir.addKeyListener(new EventoTeclado());
@@ -119,10 +119,11 @@ public class Chat {
 		footerPanel.setBackground(micolor);
 
 		JScrollPane scroll = new JScrollPane(area);
+		scroll.setAutoscrolls(true);
 		scroll.setOpaque(true);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		mainPanel = new JPanel(new BorderLayout(10, 10));
-		mainPanel.add(scroll);
-		mainPanel.add(area, BorderLayout.CENTER);
+		mainPanel.add(scroll, BorderLayout.CENTER);
 		mainPanel.add(footerPanel, BorderLayout.SOUTH);
 
 		boton2 = new JButton("General");
@@ -142,7 +143,7 @@ public class Chat {
 		asideIz.add(boton3);
 		asideIz.setBackground(micolor2);
 		asideIz.setBorder(new MatteBorder(1, 3, 1, 1, Color.white));
-		asideIz.setPreferredSize(new Dimension(miMarco.getWidth() / 5, miMarco.getHeight() ));
+		asideIz.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight() ));
 		boton2.setPreferredSize(new Dimension((asideIz.getWidth() / 2) + 85, asideIz.getHeight() / 14));
 		boton3.setPreferredSize(new Dimension((asideIz.getWidth() / 2) + 85, asideIz.getHeight() / 14));
 
@@ -157,17 +158,17 @@ public class Chat {
 		asidePanel = new JPanel(new BorderLayout(10, 10));
 		asidePanel.add(usuarios, BorderLayout.CENTER);
 		asidePanel.setBackground(micolor);
-		asidePanel.setPreferredSize(new Dimension(miMarco.getWidth() / 5, miMarco.getHeight() ));
+		asidePanel.setPreferredSize(new Dimension(this.getWidth() / 5, this.getHeight() ));
 
 		principal.add(nav, BorderLayout.NORTH);
 		principal.add(mainPanel, BorderLayout.CENTER);
 		principal.add(asidePanel, BorderLayout.EAST);
 		principal.add(asideIz, BorderLayout.WEST);
 		principal.add(footerPanel, BorderLayout.SOUTH);
-		miMarco.add(principal);
-		miMarco.pack();
-		miMarco.setDefaultCloseOperation(miMarco.EXIT_ON_CLOSE);
-		miMarco.setVisible(true);
+		this.add(principal);
+		this.pack();
+		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		this.setVisible(true);
 
 	}
 
@@ -240,9 +241,6 @@ public class Chat {
 		return miMarco;
 	}
 
-	public void setMiMarco(JFrame miMarco) {
-		Chat.miMarco = miMarco;
-	}
 
 	///////////////////////////////////////////////////////// CLASES DE EVENTOS
 	///////////////////////////////////////////////////////// /////////////////////////////////////////////////////
@@ -254,12 +252,12 @@ public class Chat {
 				Socket.cierraSocket();
 				Uso.getMichat().getMiMarco().dispose();
 				Uso.iniciaChat("Juegos");
-				Chat.miMarco.setTitle(e.getActionCommand());
+				miMarco.setTitle(e.getActionCommand());
 			} else if (e.getActionCommand() == "General") {
 				Socket.cierraSocket();
 				Uso.getMichat().getMiMarco().dispose();
 				Uso.iniciaChat("General");
-				Chat.miMarco.setTitle("General");
+				miMarco.setTitle("General");
 			}
 
 		}
